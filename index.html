@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kroniki Zagubionych Krain – RPG</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== EKRAN STARTOWY ===== -->
+  <div id="screen-start" class="screen active">
+    <div class="start-bg">
+      <div class="rune rune-1">᛭</div>
+      <div class="rune rune-2">ᚹ</div>
+      <div class="rune rune-3">ᚦ</div>
+      <div class="rune rune-4">ᛟ</div>
+    </div>
+    <div class="start-content">
+      <div class="title-block">
+        <p class="subtitle-top">✦ Kroniki ✦</p>
+        <h1 class="game-title">Zagubionych<br/>Krain</h1>
+        <p class="subtitle-bottom">Świat czeka na swojego bohatera</p>
+      </div>
+      <button class="btn-primary" id="btn-new-game">Nowa Przygoda</button>
+      <button class="btn-secondary" id="btn-load-game">Wczytaj Grę</button>
+      <p class="save-status" id="save-status-msg"></p>
+    </div>
+  </div>
+
+  <!-- ===== EKRAN TWORZENIA POSTACI ===== -->
+  <div id="screen-create" class="screen">
+    <div class="panel panel-create">
+      <h2 class="panel-title">Stwórz Bohatera</h2>
+
+      <div class="field-group">
+        <label for="char-name">Imię bohatera</label>
+        <input type="text" id="char-name" placeholder="Wprowadź imię..." maxlength="20" />
+      </div>
+
+      <div class="field-group">
+        <label>Wybierz klasę</label>
+        <div class="class-grid" id="class-grid">
+          <div class="class-card active" data-class="warrior">
+            <span class="class-icon">⚔️</span>
+            <span class="class-name">Wojownik</span>
+            <span class="class-desc">Mistrz walki wręcz, nieustępliwy w boju</span>
+            <div class="class-stats">
+              <span>❤️ 120</span><span>⚡ 8</span><span>🛡️ 15</span>
+            </div>
+          </div>
+          <div class="class-card" data-class="mage">
+            <span class="class-icon">🔮</span>
+            <span class="class-name">Mag</span>
+            <span class="class-desc">Władca arcany, sieje zniszczenie z dystansu</span>
+            <div class="class-stats">
+              <span>❤️ 70</span><span>⚡ 20</span><span>🛡️ 5</span>
+            </div>
+          </div>
+          <div class="class-card" data-class="rogue">
+            <span class="class-icon">🗡️</span>
+            <span class="class-name">Łotrzyk</span>
+            <span class="class-desc">Cień nocy, zadaje ciosy w słabe punkty</span>
+            <div class="class-stats">
+              <span>❤️ 90</span><span>⚡ 14</span><span>🛡️ 8</span>
+            </div>
+          </div>
+          <div class="class-card" data-class="paladin">
+            <span class="class-icon">✨</span>
+            <span class="class-name">Paladyn</span>
+            <span class="class-desc">Święty wojownik, leczy i chroni sojuszników</span>
+            <div class="class-stats">
+              <span>❤️ 100</span><span>⚡ 10</span><span>🛡️ 12</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-start-adventure">Rozpocznij Przygodę</button>
+    </div>
+  </div>
+
+  <!-- ===== EKRAN GRY ===== -->
+  <div id="screen-game" class="screen">
+
+    <!-- TOP BAR -->
+    <header class="game-header">
+      <div class="header-left">
+        <span class="hero-name" id="hud-name">Bohater</span>
+        <span class="hero-class-badge" id="hud-class">Wojownik</span>
+      </div>
+      <div class="header-center">
+        <span class="location-label" id="hud-location">🗺️ Wioska Startowa</span>
+      </div>
+      <div class="header-right">
+        <span class="gold-display">💰 <span id="hud-gold">0</span></span>
+        <button class="btn-icon" id="btn-save" title="Zapisz grę">💾</button>
+      </div>
+    </header>
+
+    <!-- STAT BARS -->
+    <div class="stat-bars" id="stat-bars">
+      <div class="stat-bar-group">
+        <span class="stat-label">❤️</span>
+        <div class="bar-track">
+          <div class="bar-fill bar-hp" id="bar-hp"></div>
+        </div>
+        <span class="stat-val" id="val-hp">100/100</span>
+      </div>
+      <div class="stat-bar-group">
+        <span class="stat-label">⚡</span>
+        <div class="bar-track">
+          <div class="bar-fill bar-mp" id="bar-mp"></div>
+        </div>
+        <span class="stat-val" id="val-mp">50/50</span>
+      </div>
+      <div class="stat-bar-group">
+        <span class="stat-label">⭐</span>
+        <div class="bar-track">
+          <div class="bar-fill bar-xp" id="bar-xp"></div>
+        </div>
+        <span class="stat-val" id="val-xp">Lvl 1</span>
+      </div>
+    </div>
+
+    <!-- GŁÓWNA ZAWARTOŚĆ -->
+    <main class="game-main">
+
+      <!-- PANEL NARRACJI -->
+      <section class="narrative-panel" id="narrative-panel">
+        <div class="scene-image" id="scene-image">
+          <div class="scene-art" id="scene-art">🏡</div>
+        </div>
+        <div class="story-text" id="story-text">
+          <p>Witaj w Zaginionych Krainach, podróżniku. Twoja przygoda dopiero się zaczyna...</p>
+        </div>
+      </section>
+
+      <!-- PANEL AKCJI -->
+      <section class="action-panel" id="action-panel">
+        <div class="choices" id="choices-container">
+          <!-- dynamicznie -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- DOLNA NAWIGACJA -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" id="nav-story" data-tab="story">
+        <span class="nav-icon">📖</span>
+        <span class="nav-label">Historia</span>
+      </button>
+      <button class="nav-btn" id="nav-inventory" data-tab="inventory">
+        <span class="nav-icon">🎒</span>
+        <span class="nav-label">Ekwipunek</span>
+      </button>
+      <button class="nav-btn" id="nav-skills" data-tab="skills">
+        <span class="nav-icon">⚔️</span>
+        <span class="nav-label">Umiejętności</span>
+      </button>
+      <button class="nav-btn" id="nav-stats" data-tab="stats">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Statystyki</span>
+      </button>
+    </nav>
+
+    <!-- ZAKŁADKA EKWIPUNEK (ukryta) -->
+    <div class="tab-panel" id="tab-inventory">
+      <h3 class="tab-title">🎒 Ekwipunek</h3>
+      <div class="inventory-grid" id="inventory-grid">
+        <!-- dynamicznie -->
+      </div>
+    </div>
+
+    <!-- ZAKŁADKA UMIEJĘTNOŚCI -->
+    <div class="tab-panel" id="tab-skills">
+      <h3 class="tab-title">⚔️ Umiejętności</h3>
+      <div class="skills-list" id="skills-list">
+        <!-- dynamicznie -->
+      </div>
+    </div>
+
+    <!-- ZAKŁADKA STATYSTYKI -->
+    <div class="tab-panel" id="tab-stats">
+      <h3 class="tab-title">📊 Karta Postaci</h3>
+      <div class="char-sheet" id="char-sheet">
+        <!-- dynamicznie -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== EKRAN WALKI ===== -->
+  <div id="screen-battle" class="screen">
+    <div class="battle-container">
+      <div class="battle-header">
+        <span class="battle-title">⚔️ Walka!</span>
+      </div>
+
+      <div class="combatants">
+        <!-- WRÓG -->
+        <div class="combatant enemy-side">
+          <div class="combatant-art" id="enemy-art">👹</div>
+          <div class="combatant-name" id="enemy-name">Goblin</div>
+          <div class="combatant-bar-wrap">
+            <div class="bar-track">
+              <div class="bar-fill bar-hp" id="enemy-hp-bar"></div>
+            </div>
+            <span class="combatant-hp" id="enemy-hp-val">50/50</span>
+          </div>
+        </div>
+
+        <div class="vs-label">VS</div>
+
+        <!-- GRACZ -->
+        <div class="combatant player-side">
+          <div class="combatant-art" id="player-battle-art">🧙</div>
+          <div class="combatant-name" id="player-battle-name">Bohater</div>
+          <div class="combatant-bar-wrap">
+            <div class="bar-track">
+              <div class="bar-fill bar-hp" id="player-hp-bar"></div>
+            </div>
+            <span class="combatant-hp" id="player-hp-val">100/100</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOG WALKI -->
+      <div class="battle-log" id="battle-log">
+        <p class="log-entry">Walka się rozpoczyna!</p>
+      </div>
+
+      <!-- AKCJE WALKI -->
+      <div class="battle-actions" id="battle-actions">
+        <button class="battle-btn btn-attack" id="btn-attack">⚔️ Atak</button>
+        <button class="battle-btn btn-skill" id="btn-skill">✨ Umiejętność</button>
+        <button class="battle-btn btn-item" id="btn-use-item">🧪 Mikstura</button>
+        <button class="battle-btn btn-flee" id="btn-flee">💨 Ucieczka</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EKRAN GAME OVER ===== -->
+  <div id="screen-gameover" class="screen">
+    <div class="gameover-content">
+      <div class="gameover-art">💀</div>
+      <h2 class="gameover-title">Poległeś</h2>
+      <p class="gameover-sub" id="gameover-msg">Twoja historia dobiegła końca...</p>
+      <button class="btn-primary" id="btn-respawn">Spróbuj ponownie</button>
+      <button class="btn-secondary" id="btn-main-menu">Menu główne</button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL TOOLTIP ===== -->
+  <div id="item-modal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-icon" id="modal-icon">🗡️</div>
+      <h4 class="modal-name" id="modal-name">Nazwa</h4>
+      <p class="modal-desc" id="modal-desc">Opis</p>
+      <div class="modal-btns">
+        <button class="btn-primary btn-sm" id="modal-use">Użyj</button>
+        <button class="btn-secondary btn-sm" id="modal-close">Zamknij</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="game.js"></script>
+</body>
+</html>
